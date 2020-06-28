@@ -37,7 +37,7 @@ class Messages extends Component {
   }
 
   displayMessages = messages => (
-    messages.length && messages.map(message => (
+    !!messages.length && messages.map(message => (
       <Message
         key={message.timestamp}
         message={message}
