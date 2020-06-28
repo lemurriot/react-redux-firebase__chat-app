@@ -160,6 +160,7 @@ class MessageForm extends Component {
             icon="edit"
           />
           <Button
+            disabled={uploadState === 'uploading'}
             color="teal"
             content="Upload Media"
             labelPosition="right"
