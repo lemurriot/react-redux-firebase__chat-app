@@ -60,8 +60,8 @@ class DirectMessages extends Component {
     const updatedUsers = this.state.users.reduce((acc, user) => {
       if (user.uid === userId) {
         user["status"] = `${connected ? "online" : "offline"}`;
-        return acc.concat(user);
       }
+      return acc.concat(user);
     }, []);
     this.setState({ users: updatedUsers });
   };
