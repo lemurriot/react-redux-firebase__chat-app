@@ -8,10 +8,10 @@ import ProgressBar from "./ProgressBar";
 class MessageForm extends Component {
   state = {
     storageRef: firebase.storage().ref(),
-    uploadState: '',
+    uploadState: "",
     uploadTask: null,
     percentUploaded: 0,
-    message: '',
+    message: "",
     channel: this.props.currentChannel,
     user: this.props.currentUser,
     loading: false,
@@ -37,20 +37,20 @@ class MessageForm extends Component {
       },
     };
     if (fileUrl) {
-      message['image'] = fileUrl;
+      message["image"] = fileUrl;
     } else {
-      message['content'] = this.state.message;
+      message["content"] = this.state.message;
     }
     return message;
   };
 
   sendMessage = () => {
-    const { messagesRef } = this.props;
+    const { getMessagesRef } = this.props;
     const { message, channel } = this.state;
 
     if (message) {
       this.setState({ loading: true });
-      messagesRef
+      getMessagesRef()
         .child(channel.id)
         .push()
         .set(this.createMessage())
@@ -71,10 +71,18 @@ class MessageForm extends Component {
     }
   };
 
+  getPath = () => {
+    if (this.props.isPrivateChannel) {
+      return `chat/private-${this.state.channel.id}`;
+    } else {
+      return "chat/public";
+    }
+  };
+
   uploadFile = (file, metadata) => {
     const pathToUpload = this.state.channel.id;
-    const ref = this.props.messagesRef;
-    const filePath = `chat/public/${uuidv4()}.jpg`;
+    const ref = this.props.getMessagesRef();
+    const filePath = `${this.getPatch()}/${uuidv4()}.jpg`;
 
     this.setState(
       {
@@ -119,22 +127,30 @@ class MessageForm extends Component {
   };
 
   sendFileMessage = (fileUrl, ref, pathToUpload) => {
-    ref.child(pathToUpload)
+    ref
+      .child(pathToUpload)
       .push()
       .set(this.createMessage(fileUrl))
       .then(() => {
-        this.setState({ uploadState: 'done' })
+        this.setState({ uploadState: "done" });
       })
-      .catch(err => {
+      .catch((err) => {
         console.error(err);
         this.setState({
           errors: this.state.errors.concat(err),
-        })
-      })
-  }
+        });
+      });
+  };
 
   render() {
-    const { errors, message, loading, modal, uploadState, percentUploaded } = this.state;
+    const {
+      errors,
+      message,
+      loading,
+      modal,
+      uploadState,
+      percentUploaded,
+    } = this.state;
     return (
       <Segment className="message__form">
         <Input
@@ -160,7 +176,7 @@ class MessageForm extends Component {
             icon="edit"
           />
           <Button
-            disabled={uploadState === 'uploading'}
+            disabled={uploadState === "uploading"}
             color="teal"
             content="Upload Media"
             labelPosition="right"
