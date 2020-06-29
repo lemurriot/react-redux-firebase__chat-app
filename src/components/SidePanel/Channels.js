@@ -8,9 +8,9 @@ class Channels extends Component {
   state = {
     user: this.props.currentUser,
     channels: [],
-    activeChannel: "",
-    channelName: "",
-    channelDetails: "",
+    activeChannel: '',
+    channelName: '',
+    channelDetails: '',
     channelsRef: firebase.database().ref('channels'),
     modal: false,
     firstLoad: true,
@@ -111,7 +111,7 @@ class Channels extends Component {
     const { channels, modal } = this.state;
     return (
       <Fragment>
-        <Menu.Menu style={{ paddingBottom: "2em" }}>
+        <Menu.Menu className="menu">
           <Menu.Item>
             <span>
               <Icon name="exchange" /> Channels{" "}
