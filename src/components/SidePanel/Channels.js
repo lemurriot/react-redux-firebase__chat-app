@@ -95,7 +95,7 @@ class Channels extends Component {
     if (this.state.firstLoad && this.state.channels.length) {
       this.props.setCurrentChannel(firstChannel);
       this.setActiveChannel(firstChannel);
-      this.setState({ channel: firstChannel })
+      this.setState({ channel: firstChannel });
     }
     this.setState({ firstLoad: false });
   };
@@ -149,15 +149,15 @@ class Channels extends Component {
     this.setState({ activeChannel: channel.id });
   };
 
-  getNotificationCount = channel => {
+  getNotificationCount = (channel) => {
     let count = 0;
-    this.state.notifications.forEach(notification => {
+    this.state.notifications.forEach((notification) => {
       if (notification.id === channel.id) {
         count = notification.count;
       }
     });
     if (count > 0) return count;
-  }
+  };
 
   displayChannels = (channels) =>
     channels.length > 0 &&
@@ -175,6 +175,7 @@ class Channels extends Component {
         # {channel.name}
       </Menu.Item>
     ));
+
   handleSubmit = (e) => {
     e.preventDefault();
     if (this.isFormValid(this.state)) {
