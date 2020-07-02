@@ -148,7 +148,10 @@ class MessageForm extends Component {
       });
   };
 
-  handleKeyDown = () => {
+  handleKeyDown = (e) => {
+    if (e.ctrlKey && e.keyCode === 13){
+      this.sendMessage();
+    }
     const { message, typingRef, channel, user } = this.state;
     if (message) {
       typingRef.child(channel.id).child(user.uid).set(user.displayName);

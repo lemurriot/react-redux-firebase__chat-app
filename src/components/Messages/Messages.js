@@ -7,6 +7,8 @@ import MessagesHeader from "./MessagesHeader";
 import MessageForm from "./MessageForm";
 import Message from "./Message";
 import Typing from "./Typing";
+import Skeleton from "./Skeleton";
+
 class Messages extends Component {
   state = {
     privateChannel: this.props.isPrivateChannel,
@@ -232,12 +234,21 @@ class Messages extends Component {
       </div>
     ));
 
-
+  displayMessagesSkeleton = loading => (
+    loading ? (
+      <Fragment>
+        {[...Array(10)].map((_, i) => (
+          <Skeleton key={i} />
+        ))}
+      </Fragment>
+    ) : null
+  );
 
   render() {
     const {
       messagesRef,
       messages,
+      messagesLoading,
       channel,
       currentUser,
       numUniqueUsers,
@@ -261,6 +272,7 @@ class Messages extends Component {
         />
         <Segment>
           <Comment.Group className="messages">
+            {this.displayMessagesSkeleton(messagesLoading)}
             {searchTerm
               ? this.displayMessages(searchResults)
               : this.displayMessages(messages)}
