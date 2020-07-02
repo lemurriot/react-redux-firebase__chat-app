@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from "react";
-import { connect } from 'react-redux';
-import { setColors } from '../../actions';
+import { connect } from "react-redux";
+import { setColors } from "../../actions";
 import firebase from "../../firebase";
 import {
   Sidebar,
@@ -30,12 +30,20 @@ class ColorPanel extends Component {
     }
   }
 
+  componentWillUnmount() {
+    this.removeListener();
+  }
+
   addListener = (userId) => {
     let userColors = [];
     this.state.usersRef.child(`${userId}/colors`).on("child_added", (snap) => {
       userColors.unshift(snap.val());
       this.setState({ userColors });
     });
+  };
+
+  removeListener = () => {
+    this.state.usersRef.child(`${this.state.user.uid}/colors`).off();
   };
 
   openModal = () => this.setState({ modal: true });
@@ -71,7 +79,10 @@ class ColorPanel extends Component {
     colors.map((color, i) => (
       <Fragment key={i}>
         <Divider />
-        <div className="color__container" onClick={() => this.props.setColors(color.primary, color.secondary)}>
+        <div
+          className="color__container"
+          onClick={() => this.props.setColors(color.primary, color.secondary)}
+        >
           <div className="color__square" style={{ background: color.primary }}>
             <div
               className="color__overlay"
