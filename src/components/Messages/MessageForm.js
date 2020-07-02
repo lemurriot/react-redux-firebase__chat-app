@@ -4,6 +4,9 @@ import firebase from "../../firebase";
 import { Segment, Button, Input } from "semantic-ui-react";
 import FileModal from "./FileModal";
 import ProgressBar from "./ProgressBar";
+import { Picker, emojiIndex } from "emoji-mart";
+import { emojiColonToUnicode } from "../../utils";
+import "emoji-mart/css/emoji-mart.css";
 
 class MessageForm extends Component {
   state = {
@@ -18,6 +21,7 @@ class MessageForm extends Component {
     errors: [],
     modal: false,
     typingRef: firebase.database().ref("typing"),
+    emojiPicker: false,
   };
 
   openModal = () => this.setState({ modal: true });
@@ -153,6 +157,17 @@ class MessageForm extends Component {
     }
   };
 
+  handleTogglePicker = () => {
+    this.setState(prevState => ({  emojiPicker: !prevState.emojiPicker }))
+  }
+
+  handleAddEmoji = emoji => {
+    const oldMessage = this.state.message;
+    const newMessage = emojiColonToUnicode(` ${oldMessage} ${emoji.colons} `, emojiIndex);
+    this.setState({ message: newMessage, emojiPicker: false });
+    setTimeout(() => this.messageInputRef.focus(), 0)
+  }
+
   render() {
     const {
       errors,
@@ -161,17 +176,28 @@ class MessageForm extends Component {
       modal,
       uploadState,
       percentUploaded,
+      emojiPicker,
     } = this.state;
     return (
       <Segment className="message__form">
+        {emojiPicker && (
+          <Picker
+            set="apple"
+            onSelect={this.handleAddEmoji}
+            className="emojipicker"
+            title="Pick your emoji"
+            emoji="point_up"
+          />
+        )}
         <Input
           fluid
           name="message"
           onKeyDown={this.handleKeyDown}
           onChange={this.handleChange}
           value={message}
+          ref={node => (this.messageInputRef = node)}
           style={{ marginBottom: "0.7em" }}
-          label={<Button icon={"add"} />}
+          label={<Button icon={emojiPicker ? "close" : "add"} content={emojiPicker ? "Close" : null} onClick={this.handleTogglePicker} />}
           labelPosition="left"
           placeholder="Write your message"
           className={

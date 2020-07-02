@@ -36,10 +36,17 @@ class Messages extends Component {
     }
   }
 
-  componentDidUpdate(_prevPros, prevState) {
+  componentDidUpdate(_prevProps, prevState) {
     if (prevState.messages !== this.state.messages) {
       this.countUniqueUsers(this.state.messages);
     }
+    if (this.messagesEnd) {
+      this.scrollToBottom()
+    }
+  }
+
+  scrollToBottom = () => {
+    this.messagesEnd.scrollIntoView({ behavior: 'smooth' });
   }
 
   addListeners = (channelId) => {
@@ -225,6 +232,8 @@ class Messages extends Component {
       </div>
     ));
 
+
+
   render() {
     const {
       messagesRef,
@@ -256,6 +265,7 @@ class Messages extends Component {
               ? this.displayMessages(searchResults)
               : this.displayMessages(messages)}
             {this.displayTypingUsers(typingUsers)}
+            <div ref={node => (this.messagesEnd = node)}></div>
           </Comment.Group>
         </Segment>
         <MessageForm

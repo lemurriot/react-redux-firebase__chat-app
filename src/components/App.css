@@ -15,7 +15,7 @@ html, body, .app {
   overflow-y: scroll;
 }
 
-/* Messages Form */
+/* MessagesForm.js */
 .message__form {
   position: fixed !important;
   bottom: 1em;
@@ -23,6 +23,10 @@ html, body, .app {
   left: 0;
   right: 1em;
   z-index: 200;
+}
+
+.emojipicker {
+  position: absolute;
 }
 
 /* Message.js */
