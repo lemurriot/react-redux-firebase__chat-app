@@ -141,12 +141,13 @@ class Messages extends Component {
       loadedMessages.push(snap.val());
       this.setState({
         messages: loadedMessages,
-        messagesLoading: false,
+        // messagesLoading: false,
       });
       this.countUniqueUsers(loadedMessages);
       this.countUserPosts(loadedMessages);
     });
     this.addToListeners(channelId, ref, 'child_added');
+    this.setState({ messagesLoading: false })
   };
 
   countUniqueUsers = (messages) => {
@@ -303,7 +304,7 @@ class Messages extends Component {
         />
         <Segment>
           <Comment.Group className="messages">
-            {this.displayMessagesSkeleton(messagesLoading)}
+            {messagesLoading && this.displayMessagesSkeleton(messagesLoading)}
             {searchTerm
               ? this.displayMessages(searchResults)
               : this.displayMessages(messages)}

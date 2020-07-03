@@ -1,2 +1,2 @@
 # React Redux Firebase
-Chat app
+Chat app -- Slack clone
